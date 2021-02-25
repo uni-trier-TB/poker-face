@@ -186,9 +186,9 @@ public class RMIServer extends UnicastRemoteObject implements IServer
 			PokerState s = this.model.getState();
 			if (s instanceof Flop)
 				max = 3;
-			else if (s instanceof River)
-				max = 4;
 			else if (s instanceof Turn)
+				max = 4;
+			else if (s instanceof River)
 				max = 5;
 			JSONArray myArr = new JSONArray();
 			JSONArray cArr = new JSONArray();
