@@ -75,7 +75,7 @@ public class PokerPlayer extends ImageView
 		l.setFont(new Font("Arial", 30));
 
 		Stop[] stops = new Stop[]
-		{ new Stop(0, Color.GRAY), new Stop(1, Color.RED) };
+				{ new Stop(0, Color.GRAY), new Stop(1, Color.RED) };
 		LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops);
 		l.setTextFill(lg1);
 		Color col = Color.rgb(32, 32, 32);
@@ -197,7 +197,7 @@ public class PokerPlayer extends ImageView
 
 	public Label getMoneyLabel()
 	{
-		String text = this.isEmpty() ? "" : " €: " + this.money + " ";
+		String text = this.isEmpty() ? "" : " â‚¬: " + this.money + " ";
 		this.moneyLabel.setText(text);
 		return this.moneyLabel;
 	}

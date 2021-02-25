@@ -52,7 +52,7 @@ public class View extends Scene
 	private ImageView smallBlindJeton;
 	private ImageView bigBlindJeton;
 	private ImageView pileJeton;
-	private Label potLabel = new Label("€: 0");
+	private Label potLabel = new Label("â‚¬: 0");
 	private Label betLabel = new Label();
 	private Circle c;
 	private Stage primaryStage;
@@ -217,7 +217,7 @@ public class View extends Scene
 	}
 
 	public void animateJetonToPot(PokerModel pokerModel, ImageView jeton, PokerPlayer p, int transDuration,
-			int fadDuration, int transDelay)
+								  int fadDuration, int transDelay)
 	{
 		this.addRemoveAll(jeton);
 		jeton.setTranslateX(p.getX() + p.getFitHeight() / 2);
@@ -250,7 +250,7 @@ public class View extends Scene
 	}
 
 	private void animateCard(PokerPlayer p, int i, int j, int translateDuration, int rotateDuration,
-			int delayMultiplyer)
+							 int delayMultiplyer)
 	{
 		Card card = p.getCards()[i];
 		Point cardPos = p.getCardPos()[i];
@@ -374,7 +374,7 @@ public class View extends Scene
 
 	public void drawPot(PokerModel pokerModel)
 	{
-		this.potLabel.setText(" €: " + pokerModel.getPotMoney() + " ");
+		this.potLabel.setText(" â‚¬: " + pokerModel.getPotMoney() + " ");
 	}
 
 	private void setLabel(Label l, Point pos)
@@ -408,7 +408,7 @@ public class View extends Scene
 
 	public void updatePot(PokerModel pokerModel)
 	{
-		this.potLabel.setText("€: " + pokerModel.getPotMoney());
+		this.potLabel.setText("â‚¬: " + pokerModel.getPotMoney());
 	}
 
 	public void error(String message, PokerModel pokerModel)

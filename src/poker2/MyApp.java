@@ -61,7 +61,7 @@ public class MyApp extends Application
 							rmi = new RMIServer(model);
 							Naming.bind(IServer.serverName, rmi);
 							// new RMIClient(model);
-							System.out.println("RMI l‰uft");
+							System.out.println("RMI l√§uft");
 						} catch (RemoteException | MalformedURLException | AlreadyBoundException e)
 						{
 							System.err.println("Couldn't start RMI Server");
