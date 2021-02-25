@@ -7,10 +7,19 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import javafx.application.Platform;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import poker2.c.Logger;
 import poker2.c.RMI.interfaces.IServer;
 import poker2.model.PokerModel;
+import poker2.model.holdemevaluator.Card;
 import poker2.model.player.PokerPlayer;
+import poker2.model.state.PokerState;
+import poker2.model.state.PreFlop;
+import poker2.model.state.community.CommunityState;
+import poker2.model.state.community.Flop;
+import poker2.model.state.community.River;
+import poker2.model.state.community.Turn;
 
 @SuppressWarnings("serial")
 public class RMIServer extends UnicastRemoteObject implements IServer
@@ -141,4 +150,67 @@ public class RMIServer extends UnicastRemoteObject implements IServer
 		return this.model.getState().toString();
 	}
 
+	@Override
+	public String getAvailableActions(String playerName) throws RemoteException
+	{
+		PokerPlayer p = this.model.getCurrentPlayer();
+
+		if (!p.getName().equals(playerName))
+			return "";
+
+		if (p.isAllin())
+			return "allin";
+
+		PokerState state = this.model.getState();
+
+		String actions = "fold";
+
+		if (state instanceof PreFlop) {
+			PreFlop s = (PreFlop) state;
+			actions += s.isCheckPossible() ? "|check" : "|call " + s.getNeededBet(p);
+			actions += s.isRaisePossible() ? "|raise " + s.getRaiseBet() : "";
+		} else if (state instanceof CommunityState) {
+			CommunityState s = (CommunityState) state;
+			actions += s.isCheckPossible() ? "|check|bet " + s.getBet() : "|call " + s.getNeededBet(p)
+					+ (s.isRaisePossible() ? "|raise " +s.getRaiseBet() : "");
+		}
+
+		return actions;
+	}
+
+	@Override
+	public String getCards(String playerName) throws RemoteException {
+		PokerPlayer p = this.model.getPlayerByName(playerName);
+		if (p != null) {
+			int max = 0;
+			PokerState s = this.model.getState();
+			if (s instanceof Flop)
+				max = 3;
+			else if (s instanceof River)
+				max = 4;
+			else if (s instanceof Turn)
+				max = 5;
+			JSONArray myArr = new JSONArray();
+			JSONArray cArr = new JSONArray();
+			myArr.put(p.getCards()[0].getCardNumber());
+			myArr.put(p.getCards()[1].getCardNumber());
+			for (int i = 0; i < 5; i++) {
+				cArr.put(i < max ? this.model.getCommunityCards()[i].getCardNumber() : 0);
+			}
+			JSONObject obj = new JSONObject();
+			obj.put("mycards", myArr);
+			obj.put("communitycards", cArr);
+			return obj.toString();
+		}
+		return "Unknown Player";
+	}
+
+	@Override
+	public String getMoney(String playerName) throws RemoteException {
+		PokerPlayer p = this.model.getPlayerByName(playerName);
+		if (p != null) {
+			return "" + p.getMoney();
+		}
+		return "0";
+	}
 }

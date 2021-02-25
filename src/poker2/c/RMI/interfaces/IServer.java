@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 public interface IServer extends Remote
 {
-	public String serverName = "RMIServer";
+	String serverName = "RMIServer";
 
 	boolean addPlayer(String name) throws RemoteException;
 
@@ -22,4 +22,10 @@ public interface IServer extends Remote
 	String getPlayerInformation(String playerName) throws RemoteException;
 
 	String getState() throws RemoteException;
+
+	String getAvailableActions(String playerName) throws RemoteException;
+
+	String getCards(String playerName) throws RemoteException;
+
+	String getMoney(String playerName) throws RemoteException;
 }
