@@ -221,10 +221,6 @@ public class JSONReader extends Thread
 			}
 			return;
 		}
-		else if (method.equals("update"))
-		{
-			task = () -> { this.model.getView().update(model); };
-		}
 		else if (method.equals(("status")))
 		{
 			jw.sendMessage(SUC_STRING + "\"" + this.model.getState().toString() + "\" }\n");
