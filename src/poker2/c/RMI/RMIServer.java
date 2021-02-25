@@ -96,7 +96,7 @@ public class RMIServer extends UnicastRemoteObject implements IServer
 	public String getPlayerInformation(String playerName) throws RemoteException
 	{
 		this.log.write("getPlayerInformation");
-		PokerPlayer p = this.model.getCurrentPlayer();
+		PokerPlayer p = this.model.getPlayerByName(playerName);
 		if (p != null)
 		{
 			String name = p.getName();
