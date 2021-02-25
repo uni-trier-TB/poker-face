@@ -70,6 +70,11 @@ public final class Card extends ImageView implements Comparable<Card>
 		return suit;
 	}
 
+	public int getCardNumber()
+	{
+		return cardNumber;
+	}
+
 	public int getNumber()
 	{
 		return this.value.getValue() * this.suit.getValue();
