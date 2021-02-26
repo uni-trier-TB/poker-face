@@ -245,47 +245,26 @@ public class JSONReader extends Thread
 			if(!currentPlayer.isAllin()){
 				
 				PokerState currentState = this.model.getState();
-				String currentStateString = currentState.toString();
-				
-				if(currentStateString.equals("Pre-Flop-State")) {
-					PreFlop betState = (PreFlop) currentState;
+				if(currentState instanceof PreFlop) {
+					PreFlop PFstate = (PreFlop) currentState;
 					
-					if(betState.isCheckPossible()) messageContent = messageContent.concat(",check");
+					if(PFstate.isCheckPossible()) messageContent = messageContent.concat(",check");
 					else messageContent = messageContent.concat(",call");
 				
-					if(betState.isRaisePossible()) messageContent = messageContent.concat(",raise");
+					if(PFstate.isRaisePossible()) messageContent = messageContent.concat(",raise");
 				}
 				else {
-					if(currentStateString.equals("Flop-State")) 
+					if(currentState instanceof CommunityState) 
 					{
-						Flop betState = (Flop)((CommunityState)currentState);
-						if(betState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
+						CommunityState CState = (CommunityState) currentState;
+						if(CState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
 						else messageContent = messageContent.concat(",call");
 						
-						if(betState.isRaisePossible() && betState.getCurMaxBet() > 0) {
+						if(CState.isRaisePossible() && CState.getCurMaxBet() > 0) {
 							messageContent = messageContent.concat(",raise");
 						}
 					}
-					else if(currentStateString.equals("River-State")) 
-					{
-						River betState = (River)((CommunityState)currentState);
-						if(betState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
-						else messageContent = messageContent.concat(",call");
-						
-						if(betState.isRaisePossible() && betState.getCurMaxBet() > 0) {
-							messageContent = messageContent.concat(",raise");
-						}
-					}
-					else if(currentStateString.equals("Turn-State")) 
-					{
-						Turn betState = (Turn)((CommunityState)currentState);
-						if(betState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
-						else messageContent = messageContent.concat(",call");
-						
-						if(betState.isRaisePossible() && betState.getCurMaxBet() > 0) {
-							messageContent = messageContent.concat(",raise");
-						}
-					}
+					
 				}
 			}
 			else {messageContent = "none";}
