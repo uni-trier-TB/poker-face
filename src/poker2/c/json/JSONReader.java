@@ -12,6 +12,11 @@ import poker2.c.Logger;
 import poker2.model.PokerModel;
 import poker2.model.player.PokerPlayer;
 import poker2.model.state.PokerState;
+import poker2.model.state.PreFlop;
+import poker2.model.state.community.CommunityState;
+import poker2.model.state.community.Flop;
+import poker2.model.state.community.River;
+import poker2.model.state.community.Turn;
 
 public class JSONReader extends Thread
 {
@@ -233,7 +238,60 @@ public class JSONReader extends Thread
 			else
 				jw.sendMessage(FALS_STRING + "\"No current player yet \" }\n");
 		}
-
+		else if (method.equals(("actions")))
+		{
+			String messageContent = "fold";
+			PokerPlayer currentPlayer = this.model.getCurrentPlayer();
+			if(!currentPlayer.isAllin()){
+				
+				PokerState currentState = this.model.getState();
+				String currentStateString = currentState.toString();
+				
+				if(currentStateString.equals("Pre-Flop-State")) {
+					PreFlop betState = (PreFlop) currentState;
+					
+					if(betState.isCheckPossible()) messageContent = messageContent.concat(",check");
+					else messageContent = messageContent.concat(",call");
+				
+					if(betState.isRaisePossible()) messageContent = messageContent.concat(",raise");
+				}
+				else {
+					if(currentStateString.equals("Flop-State")) 
+					{
+						Flop betState = (Flop)((CommunityState)currentState);
+						if(betState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
+						else messageContent = messageContent.concat(",call");
+						
+						if(betState.isRaisePossible() && betState.getCurMaxBet() > 0) {
+							messageContent = messageContent.concat(",raise");
+						}
+					}
+					else if(currentStateString.equals("River-State")) 
+					{
+						River betState = (River)((CommunityState)currentState);
+						if(betState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
+						else messageContent = messageContent.concat(",call");
+						
+						if(betState.isRaisePossible() && betState.getCurMaxBet() > 0) {
+							messageContent = messageContent.concat(",raise");
+						}
+					}
+					else if(currentStateString.equals("Turn-State")) 
+					{
+						Turn betState = (Turn)((CommunityState)currentState);
+						if(betState.isCheckPossible()) messageContent = messageContent.concat(",check,bet");
+						else messageContent = messageContent.concat(",call");
+						
+						if(betState.isRaisePossible() && betState.getCurMaxBet() > 0) {
+							messageContent = messageContent.concat(",raise");
+						}
+					}
+				}
+			}
+			else {messageContent = "none";}
+			jw.sendMessage(SUC_STRING + "\"" + messageContent + "\" }\n");
+			
+		}
 		Platform.runLater(task);
 	}
 

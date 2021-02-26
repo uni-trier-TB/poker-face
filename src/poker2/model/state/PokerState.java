@@ -146,5 +146,9 @@ public abstract class PokerState
 		curPlayer.setActive(false);
 		model.getView().fold(model);
 	}
+	
+	public int getCurMaxBet() {
+		return curMaxBet;
+	}
 
 }
