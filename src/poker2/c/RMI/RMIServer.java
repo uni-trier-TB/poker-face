@@ -167,12 +167,12 @@ public class RMIServer extends UnicastRemoteObject implements IServer
 
 		if (state instanceof PreFlop) {
 			PreFlop s = (PreFlop) state;
-			actions += s.isCheckPossible() ? "|check" : "|call " + s.getNeededBet(p);
-			actions += s.isRaisePossible() ? "|raise " + s.getRaiseBet() : "";
+			actions += s.isCheckPossible() ? ",check" : ",call " + s.getNeededBet(p);
+			actions += s.isRaisePossible() ? ",raise " + s.getRaiseBet() : "";
 		} else if (state instanceof CommunityState) {
 			CommunityState s = (CommunityState) state;
-			actions += s.isCheckPossible() ? "|check|bet " + s.getBet() : "|call " + s.getNeededBet(p)
-					+ (s.isRaisePossible() ? "|raise " +s.getRaiseBet() : "");
+			actions += s.isCheckPossible() ? ",check,bet " + s.getBet() : ",call " + s.getNeededBet(p)
+					+ (s.isRaisePossible() ? ",raise " +s.getRaiseBet() : "");
 		}
 
 		return actions;
