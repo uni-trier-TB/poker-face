@@ -180,29 +180,29 @@ public class RMIServer extends UnicastRemoteObject implements IServer
 
 	@Override
 	public String getCards(String playerName) throws RemoteException {
+		JSONObject obj = new JSONObject();
+		JSONArray cArr = new JSONArray();
+		int max = 0;
+		PokerState s = this.model.getState();
+		if (s instanceof Flop)
+			max = 3;
+		else if (s instanceof Turn)
+			max = 4;
+		else if (s instanceof River)
+			max = 5;
+		for (int i = 0; i < 5; i++) {
+			cArr.put(i < max ? this.model.getCommunityCards()[i].getCardNumber() : 0);
+		}
+		obj.put("communitycards", cArr);
+
 		PokerPlayer p = this.model.getPlayerByName(playerName);
 		if (p != null) {
-			int max = 0;
-			PokerState s = this.model.getState();
-			if (s instanceof Flop)
-				max = 3;
-			else if (s instanceof Turn)
-				max = 4;
-			else if (s instanceof River)
-				max = 5;
 			JSONArray myArr = new JSONArray();
-			JSONArray cArr = new JSONArray();
 			myArr.put(p.getCards()[0].getCardNumber());
 			myArr.put(p.getCards()[1].getCardNumber());
-			for (int i = 0; i < 5; i++) {
-				cArr.put(i < max ? this.model.getCommunityCards()[i].getCardNumber() : 0);
-			}
-			JSONObject obj = new JSONObject();
 			obj.put("mycards", myArr);
-			obj.put("communitycards", cArr);
-			return obj.toString();
 		}
-		return "Unknown Player";
+		return obj.toString();
 	}
 
 	@Override
