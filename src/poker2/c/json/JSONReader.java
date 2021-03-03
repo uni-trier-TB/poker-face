@@ -229,6 +229,7 @@ public class JSONReader extends Thread
 		else if (method.equals(("status")))
 		{
 			jw.sendMessage(SUC_STRING + "\"" + this.model.getState().toString() + "\" }\n");
+			return;
 		}
 		else if (method.equals(("current")))
 		{
@@ -237,6 +238,7 @@ public class JSONReader extends Thread
 				jw.sendMessage(SUC_STRING + "\"" + curPlayerName + "\" }\n");
 			else
 				jw.sendMessage(FALS_STRING + "\"No current player yet \" }\n");
+			return;
 		}
 		else if (method.equals(("actions")))
 		{
@@ -266,10 +268,11 @@ public class JSONReader extends Thread
 					}
 					
 				}
+			} else {
+				messageContent = "none";
 			}
-			else {messageContent = "none";}
 			jw.sendMessage(SUC_STRING + "\"" + messageContent + "\" }\n");
-			
+			return;
 		}
 		Platform.runLater(task);
 	}
