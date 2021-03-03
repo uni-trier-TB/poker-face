@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import javafx.application.Platform;
@@ -273,8 +275,40 @@ public class JSONReader extends Thread
 			}
 			jw.sendMessage(SUC_STRING + "\"" + messageContent + "\" }\n");
 			return;
+		} else if (method.equals("money")) {
+			PokerPlayer p = this.model.getPlayerByName(name);
+			String money = "0";
+			if (p != null)
+				money = "" + p.getMoney();
+
+			jw.sendMessage(SUC_STRING + "\"" + money + "\" }\n");
+			return;
+		} else if (method.equals("cards")) {
+			JSONObject obj = new JSONObject();
+			JSONArray cArr = new JSONArray();
+			int max = 0;
+
+			if (state instanceof Flop)
+				max = 3;
+			else if (state instanceof Turn)
+				max = 4;
+			else if (state instanceof River)
+				max = 5;
+			for (int i = 0; i < 5; i++) {
+				cArr.put(i < max ? this.model.getCommunityCards()[i].getCardNumber() : 0);
+			}
+			obj.put("communitycards", cArr);
+
+			PokerPlayer p = this.model.getPlayerByName(name);
+			if (p != null) {
+				JSONArray myArr = new JSONArray();
+				myArr.put(p.getCards()[0].getCardNumber());
+				myArr.put(p.getCards()[1].getCardNumber());
+				obj.put("mycards", myArr);
+			}
+			jw.sendMessage(SUC_STRING + obj + " }\n");
+			return;
 		}
 		Platform.runLater(task);
 	}
-
 }
