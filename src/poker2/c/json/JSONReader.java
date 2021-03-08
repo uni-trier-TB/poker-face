@@ -306,7 +306,10 @@ public class JSONReader extends Thread
 				myArr.put(p.getCards()[1].getCardNumber());
 				obj.put("mycards", myArr);
 			}
-			jw.sendMessage(SUC_STRING + obj + " }\n");
+			JSONObject out = new JSONObject();
+			out.put("status", "Success");
+			out.put("message", obj.toString());
+			jw.sendMessage(out.toString() + "\n");
 			return;
 		}
 		Platform.runLater(task);
